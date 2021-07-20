@@ -66,12 +66,10 @@ do
     ZFSPOOL=`cut -d'/' -f1 <<<"$ZFS"`
     if [[ ! " ${IGNOREPOOL[@]} " =~ " ${ZFSPOOL} " ]]; then
         if [[ ! " ${IGNORE[@]} " =~ " ${ZFSPOOL}-${ZFSFS} " ]]; then
-        BACKUP=backup-${ZFSPOOL}-${ZFSFS}
-    echo $BACKUP
-    echo ${ZFS}@${BACKUP}
-        /usr/sbin/zfs snapshot ${ZFS}@${BACKUP}
-        /usr/sbin/zfs send ${ZFS}@${BACKUP} | pigz -c > ${DESTBACKUP}/${BACKUP}.img.gz
-        /usr/sbin/zfs destroy ${ZFS}@${BACKUP}
+            BACKUP=backup-${ZFSPOOL}-${ZFSFS}
+            /usr/sbin/zfs snapshot ${ZFS}@${BACKUP}
+            /usr/sbin/zfs send ${ZFS}@${BACKUP} | pigz -c > ${DESTBACKUP}/${BACKUP}.img.gz
+            /usr/sbin/zfs destroy ${ZFS}@${BACKUP}
         fi
     fi
 done <<< "$ZFS"
